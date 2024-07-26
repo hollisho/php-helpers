@@ -131,15 +131,15 @@ class ArrayHelper
      *
      * ~~~
      * // working with array
-     * $username = \yii\helpers\ArrayHelper::getValue($_POST, 'username');
+     * $username = ArrayHelper::getValue($_POST, 'username');
      * // working with object
-     * $username = \yii\helpers\ArrayHelper::getValue($user, 'username');
+     * $username = ArrayHelper::getValue($user, 'username');
      * // working with anonymous function
-     * $fullName = \yii\helpers\ArrayHelper::getValue($user, function ($user, $defaultValue) {
+     * $fullName = ArrayHelper::getValue($user, function ($user, $defaultValue) {
      *     return $user->firstName . ' ' . $user->lastName;
      * });
      * // using dot format to retrieve the property of embedded object
-     * $street = \yii\helpers\ArrayHelper::getValue($users, 'address.street');
+     * $street = ArrayHelper::getValue($users, 'address.street');
      * ~~~
      *
      * @param array|object $array array or object to extract value from
@@ -183,7 +183,7 @@ class ArrayHelper
      * ~~~
      * // $array = ['type' => 'A', 'options' => [1, 2]];
      * // working with array
-     * $type = \yii\helpers\ArrayHelper::remove($array, 'type');
+     * $type = ArrayHelper::remove($array, 'type');
      * // $array content
      * // $array = ['options' => [1, 2]];
      * ~~~
@@ -423,16 +423,12 @@ class ArrayHelper
      * @param array $data data to be encoded
      * @param boolean $valuesOnly whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
-     * @param string $charset the charset that the data is using. If not set,
-     * [[\yii\base\Application::charset]] will be used.
+     * @param string $charset the charset that the data is using. Default utf8,
      * @return array the encoded data
      * @see http://www.php.net/manual/en/function.htmlspecialchars.php
      */
-    public static function htmlEncode($data, $valuesOnly = true, $charset = null)
+    public static function htmlEncode($data, $valuesOnly = true, $charset = 'utf8')
     {
-        if ($charset === null) {
-            $charset = Yii::$app->charset;
-        }
         $d = [];
         foreach ($data as $key => $value) {
             if (!$valuesOnly && is_string($key)) {
