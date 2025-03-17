@@ -6,7 +6,8 @@
     "helpers",
     "php",
     "array",
-    "string"
+    "string",
+    "signature"
   ],
   "license": "MIT",
   "authors": [
@@ -17,12 +18,27 @@
       "role": "Developer"
     }
   ],
+  "require-dev": {
+    "phpunit/phpunit": "^8.5",
+    "phpstan/phpstan": "^1.9"
+  },
   "require": {
     "php": ">=7.0"
   },
   "autoload": {
     "psr-4": {
       "hollisho\\helpers\\": "src"
-    }
+    },
+    "exclude-from-classmap": [
+      "/tests/"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "hollisho\\phpHelperTests\\": "tests/"
+    },
+    "exclude-from-classmap": [
+      "/tests/"
+    ]
   }
 }
