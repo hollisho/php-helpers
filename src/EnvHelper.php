@@ -3,9 +3,6 @@
 namespace hollisho\helpers;
 
 use Closure;
-use Dotenv\Repository\Adapter\PutenvAdapter;
-use Dotenv\Repository\RepositoryBuilder;
-use Dotenv\Repository\RepositoryInterface;
 use PhpOption\Option;
 
 class EnvHelper
@@ -20,7 +17,7 @@ class EnvHelper
     /**
      * The environment repository instance.
      *
-     * @var RepositoryInterface|null
+     * @var Dotenv\Repository\RepositoryInterface|null
      */
     protected static $repository;
 
@@ -55,15 +52,13 @@ class EnvHelper
     {
         if (static::$repository === null) {
             // 检查 phpdotenv 版本
-            if (class_exists('Dotenv\Repository\RepositoryBuilder')) {
+            if (method_exists(\Dotenv\Repository\RepositoryBuilder::class, 'createWithDefaultAdapters')) {
                 // 5.x 版本
-                $builder = RepositoryBuilder::createWithDefaultAdapters();
+                $builder = \Dotenv\Repository\RepositoryBuilder::createWithDefaultAdapters();
 
                 if (static::$putenv) {
-                    $builder = $builder->addAdapter(PutenvAdapter::class);
+                    $builder = $builder->addAdapter(\Dotenv\Repository\Adapter\PutenvAdapter::class);
                 }
-
-                static::$repository = $builder->immutable()->make();
             } else {
                 // 4.x 版本
                 $builder = \Dotenv\Repository\RepositoryBuilder::create();
@@ -71,9 +66,9 @@ class EnvHelper
                 if (static::$putenv) {
                     $builder = $builder->withoutAdapter(\Dotenv\Repository\Adapter\PutenvAdapter::class);
                 }
-
-                static::$repository = $builder->immutable()->make();
             }
+
+            static::$repository = $builder->immutable()->make();
         }
 
         return static::$repository;
