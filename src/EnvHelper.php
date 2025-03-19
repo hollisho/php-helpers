@@ -54,13 +54,26 @@ class EnvHelper
     public static function getRepository()
     {
         if (static::$repository === null) {
-            $builder = RepositoryBuilder::createWithDefaultAdapters();
+            // 检查 phpdotenv 版本
+            if (class_exists('Dotenv\Repository\RepositoryBuilder')) {
+                // 5.x 版本
+                $builder = RepositoryBuilder::createWithDefaultAdapters();
 
-            if (static::$putenv) {
-                $builder = $builder->addAdapter(PutenvAdapter::class);
+                if (static::$putenv) {
+                    $builder = $builder->addAdapter(PutenvAdapter::class);
+                }
+
+                static::$repository = $builder->immutable()->make();
+            } else {
+                // 4.x 版本
+                $builder = \Dotenv\Repository\RepositoryBuilder::create();
+
+                if (static::$putenv) {
+                    $builder = $builder->withoutAdapter(\Dotenv\Repository\Adapter\PutenvAdapter::class);
+                }
+
+                static::$repository = $builder->immutable()->make();
             }
-
-            static::$repository = $builder->immutable()->make();
         }
 
         return static::$repository;
