@@ -61,11 +61,14 @@ class EnvHelper
                 }
             } else {
                 // 4.x 版本
-                $builder = \Dotenv\Repository\RepositoryBuilder::create();
-
-                if (static::$putenv) {
-                    $builder = $builder->addAdapter(\Dotenv\Repository\Adapter\PutenvAdapter::class);
-                }
+                $builder = \Dotenv\Repository\RepositoryBuilder::create()
+                    ->withReaders([
+                        new \Dotenv\Repository\Adapter\EnvConstAdapter(),
+                    ])
+                    ->withWriters([
+                        new \Dotenv\Repository\Adapter\EnvConstAdapter(),
+                        new \Dotenv\Repository\Adapter\PutenvAdapter(),
+                    ]);
             }
 
             static::$repository = $builder->immutable()->make();
