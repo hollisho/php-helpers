@@ -64,7 +64,7 @@ class EnvHelper
                 $builder = \Dotenv\Repository\RepositoryBuilder::create();
 
                 if (static::$putenv) {
-                    $builder = $builder->withoutAdapter(\Dotenv\Repository\Adapter\PutenvAdapter::class);
+                    $builder = $builder->addAdapter(\Dotenv\Repository\Adapter\PutenvAdapter::class);
                 }
             }
 
